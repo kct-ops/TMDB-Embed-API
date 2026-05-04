@@ -6,7 +6,13 @@ const { config, saveConfigPatch, OVERRIDE_PATH } = require('./utils/config');
 const { authenticate, issueSession, requireAuth, getSession, updatePassword } = require('./utils/auth');
 const path = require('path');
 const { listProviders, getProvider, getCookieStats } = require('./providers/registry');
-const { createProxyRoutes, processStreamsForProxy } = require('./proxy/proxyServer');
+let createProxyRoutes, processStreamsForProxy;
+try {
+  ({ createProxyRoutes, processStreamsForProxy } = require('./proxy/proxyServer'));
+} catch (e) {
+  createProxyRoutes = () => {};
+  processStreamsForProxy = (s) => s;
+}
 const { resolveImdbId } = require('./utils/tmdb');
 const { applyFilters } = require('./utils/streamFilters');
 
